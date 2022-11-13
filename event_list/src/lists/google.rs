@@ -59,11 +59,14 @@ async fn handle(req: Request<Body>) -> Result<Response<Body>, Infallible> {
     }
 }
 
+/// Represents a Client connection to a google calendar
 pub struct GoogleList {
     calendar: Client,
 }
 
 impl GoogleList {
+    /// Attempts to load the auth token from a file.
+    /// If it could not runs `new`
     pub async fn from_file(name: &str) -> Self {
         let data = String::from_utf8(std::fs::read(name).unwrap()).unwrap();
 
@@ -100,6 +103,7 @@ impl GoogleList {
         }
     }
 
+    /// Runs the client auth and saves it to `out_name`
     pub async fn new(out_name: &str) -> Self {
         let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 

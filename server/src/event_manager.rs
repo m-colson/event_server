@@ -15,6 +15,7 @@ pub struct EventManager {
 }
 
 impl EventManager {
+    /// Creates an `EventManager` with no sources
     pub const fn new() -> Self {
         Self {
             streams: Vec::new(),
@@ -23,10 +24,13 @@ impl EventManager {
         }
     }
 
+    /// Adds a new source to this manager
     pub fn add<T: EventList + Sync + Send + 'static>(&mut self, list: T) {
         self.streams.push(Box::new(list));
     }
 
+    /// Creates a new EventManager from the config `file`
+    /// Returns an error if the file read fails or the config file couldn't be parsed
     pub async fn from_config(file: &str) -> Result<Self, Box<dyn Error>> {
         let mut out = EventManager::new();
 
@@ -45,10 +49,12 @@ impl EventManager {
         Ok(out)
     }
 
+    /// Queries all the sources and turns it into json string that is a list of `Days`
     async fn events_json(&self) -> Result<String, serde_json::Error> {
         Days::from_slice(&self.events(Utc::now().with_timezone(&Local)).await).to_json()
     }
 
+    /// Does the same as `events_json` but caches the result for an hour
     pub async fn cached_json(&mut self) -> Result<&str, serde_json::Error> {
         if Utc::now().signed_duration_since(self.cached_time) > chrono::Duration::hours(1) {
             self.cached = Some(self.events_json().await?);

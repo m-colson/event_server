@@ -5,13 +5,15 @@ use chrono::{DateTime, FixedOffset, Local, NaiveDate, NaiveDateTime, NaiveTime, 
 use ical::IcalParser;
 use std::io::BufReader;
 
+/// Represents an ical file at a remote location
 pub struct RemoteList {
     url: String,
 }
 
 impl RemoteList {
-    pub fn new(s: &str) -> Self {
-        Self { url: s.to_string() }
+    /// Create a new `RemoteList` with `url`
+    pub fn new(url: &str) -> Self {
+        Self { url: url.to_string() }
     }
 }
 

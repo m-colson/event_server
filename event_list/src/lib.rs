@@ -5,6 +5,7 @@ use std::{collections::HashMap, fmt::Display};
 use chrono::{DateTime, Local, NaiveDate};
 use serde::{Deserialize, Serialize};
 
+/// Some calendar event
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Event {
     pub title: String,
@@ -14,17 +15,20 @@ pub struct Event {
     pub class: Option<String>,
 }
 
+/// List of all the events on a certain day
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct DayList {
     pub date: DateTime<Local>,
     pub events: Vec<Event>,
 }
 
+/// List of `DayList` struct
 pub struct Days {
     list: Vec<DayList>,
 }
 
 impl Days {
+    /// Sorts the events into `Days`
     pub fn from_slice(list: &[Event]) -> Self {
         let mut preout = HashMap::<NaiveDate, Vec<Event>>::new();
 
@@ -61,6 +65,7 @@ impl Days {
         Self { list: out }
     }
 
+    /// Converts `self` into a json list of `DayList`
     pub fn to_json(&self) -> Result<String, serde_json::Error> {
         serde_json::to_string(&self.list)
     }
@@ -87,6 +92,7 @@ impl Default for Event {
     }
 }
 
+/// Trait for something that can be queried for events
 #[async_trait::async_trait]
 pub trait EventList {
     async fn init(&mut self);
