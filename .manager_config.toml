@@ -1,0 +1,9 @@
+remotes = [
+    "https://d2l.arizona.edu/d2l/le/calendar/feed/user/feed.ics?token=aoz86cxm40nzhs714147a"
+    #"https://d2l.pima.edu/d2l/le/calendar/feed/user/feed.ics?token=afwfmdttlhl24iim241f8"
+]
+
+[google_calendar]
+auth = false
+enabled = false
+token_file = "cal.token"

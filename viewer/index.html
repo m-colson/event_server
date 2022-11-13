@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function process_events(events) {
+                return events.map(e => "<p>" + new Date(e.end).toTimeString() + ": " + e.title + "</p>").join("\n")
+            }
+
+            async function fetch_data() {
+                let resp = await fetch("/");
+                let json = await resp.json();
+
+                document.body.innerHTML = json.map(({date, events}) => {
+                    return "<h1>" + (new Date(date)).toDateString() + "</h1>"
+                        + process_events(events)
+                    ;
+                }).join("\n")
+            }
+
+            fetch_data();
+        </script>
+
+        <style>
+            body {
+                background-color: rgb(51, 51, 65);
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    </body>
+</html>
