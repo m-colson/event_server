@@ -2,7 +2,6 @@ use crate::{Event, EventList};
 
 use google_calendar::Client;
 
-use std::sync::Arc;
 use tokio::sync::Mutex;
 
 use tokio::sync::mpsc::{self, Sender};
@@ -18,9 +17,7 @@ struct ClientInfo {
     pub state: String,
 }
 
-lazy_static::lazy_static! {
-    static ref INFO_SENDER: Arc<Mutex<Option<Sender<ClientInfo>>>> = Arc::new(Mutex::const_new(None));
-}
+static INFO_SENDER: Mutex<Option<Sender<ClientInfo>>> = Mutex::const_new(None);
 
 async fn handle(req: Request<Body>) -> Result<Response<Body>, Infallible> {
     match req.uri().path() {
